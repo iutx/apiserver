@@ -25,7 +25,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -76,7 +76,7 @@ func loadECDSAPrivKey(t *testing.T, filepath string, alg jose.SignatureAlgorithm
 }
 
 func loadKey(t *testing.T, filepath string, alg jose.SignatureAlgorithm, unmarshal func([]byte) (interface{}, error)) *jose.JSONWebKey {
-	data, err := ioutil.ReadFile(filepath)
+	data, err := os.ReadFile(filepath)
 	if err != nil {
 		t.Fatalf("load file: %v", err)
 	}
@@ -1479,7 +1479,7 @@ func TestToken(t *testing.T) {
 }
 
 func TestUnmarshalClaimError(t *testing.T) {
-	// Ensure error strings returned by unmarshaling claims don't include the claim.
+	// Ensure error strings returned by unmarshalling claims don't include the claim.
 	const token = "96bb299a-02e9-11e8-8673-54ee7553240e" // Fake token for testing.
 	payload := fmt.Sprintf(`{
 		"token": "%s"
